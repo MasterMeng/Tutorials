@@ -514,6 +514,644 @@ False
 
 ### 条件控制  
 
+Python的条件控制是通过一条或者多条语句的结果（True或False）来决定将要执行的代码，下图可以简单的表示条件语句的执行过程：  
+
+```flow
+st=>start: Start
+op1=>operation: Operation1
+op2=>operation: Operation2
+op3=>operation: Operation3
+op4=>operation: Operation4
+op5=>operation: Operation5
+cond1=>condition: yes or no
+cond2=>condition: yes or no
+
+st->op1->cond1
+cond1(yes)->op2
+st->op1->cond1
+cond1(no)->op3->cond2
+cond2(yes)->op4
+cond2(no)->op5
+```
+
+示例如下：  
+
+```python
+password = '123456'
+
+pw1 = input('请输入密码：')
+if pw1 == '':
+    print('输入不能为空')
+elif pw1 == password:
+    print('登录成功')
+else:
+    print('密码错误')
+```  
+
+### 循环语句  
+
+#### for循环  
+
+for循环可以用来遍历任何序列项目，比如一个列表或一个字符串。一般流程如下：  
+
+``` mermaid
+graph TD
+A[开始] --> B{序列中的元素} --> C[代码块] --> B
+B --> D[结束]
+```  
+
+示例如下：  
+
+```python
+>>> string = 'abcdef'
+>>> for c in string:
+...     print(c)
+...
+a
+b
+c
+d
+e
+f
+```  
+
+#### while循环
+
+``` mermaid
+graph TD
+A[开始循环] --> B{判定条件} --条件为真--> C[代码块] --> B
+B --条件不成立--> D[结束循环]
+``` 
+
+在for循环中，可以使用`break`来跳出循环：  
+
+示例如下
+```python
+>>> a = 1
+>>> while a < 10:
+...     print(a)
+...     a += 4
+... 
+1
+5
+9
+```  
+
+#### range()函数  
+
+如果你需要遍历一个数字序列，可以使用内置的`range()`函数，它生成算术级数：  
+
+```python
+>>> for i in range(5):
+...     print(i)
+...
+0
+1
+2
+3
+4
+```  
+
+给定的终止数值不在生成的序列中。range也可以以一个数字开头，另一个数字结尾（也可以指定增加的幅度）,也可以使用负数：  
+
+```python
+range(5, 10)
+   5, 6, 7, 8, 9
+
+range(0, 10, 3)
+   0, 3, 6, 9
+
+range(-10, -100, -30)
+  -10, -40, -70
+```  
+
+#### break 和 continue语句  
+
+`break`语句用于跳出最近的`for`或`while`循环。循环语句可能带有一个 else 子句；它会在循环遍历完列表 (使用 for) 或是在条件变为假 (使用 while) 的时候被执行，但是不会在循环被 break 语句终止时被执行。 这可以通过以下搜索素数的循环为例来进行说明：  
+
+```python
+>>> for n in range(2, 10):
+...     for x in range(2, n):
+...         if n % x == 0:
+...             print(n, 'equals', x, '*', n//x)
+...             break
+...     else:
+...         # loop fell through without finding a factor
+...         print(n, 'is a prime number')
+...
+2 is a prime number
+3 is a prime number
+4 equals 2 * 2
+5 is a prime number
+6 equals 2 * 3
+7 is a prime number
+8 equals 2 * 4
+9 equals 3 * 3
+```  
+
+`coutinue`语句表示继续循环中的下一次迭代：  
+
+```python
+>>> for num in range(2, 10):
+...     if num % 2 == 0:
+...         print("Found an even number", num)
+...         continue
+...     print("Found a number", num)
+Found an even number 2
+Found a number 3
+Found an even number 4
+Found a number 5
+Found an even number 6
+Found a number 7
+Found an even number 8
+Found a number 9
+```  
+
+#### pass语句  
+
+`pass`语句表示什么也不做。通常用在语法上需要一个语句，但程序需要什么也不做的情况下：  
+
+```python
+>>> while True:
+...     pass  # Busy-wait for keyboard interrupt (Ctrl+C)
+...
+```  
+
+### 函数  
+
+函数是一段组织好的、可重复使用的、用来实现单一或相关功能的代码段，它可以提高应用的模块性和代码的重复利用率。  
+
+之前用来输出消息的`print()`，就是Python内建的用于输出消息的函数。当然你也可以自定义自己的函数。下面我们定义一个可以输出任意范围内的Fibonacci数列的函数：  
+
+```python
+>>> def fib(n):    # write Fibonacci series up to n
+...     """Print a Fibonacci series up to n."""
+...     a, b = 0, 1
+...     while a < n:
+...         print(a, end=' ')
+...         a, b = b, a+b
+...     print()
+...
+>>> # Now call the function we just defined:
+... fib(2000)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597
+```  
+
+关键字`def`引入一个函数 定义。它必须后跟函数名称和带括号的形式参数列表。构成函数体的语句从下一行开始，并且必须缩进。    
+
+#### 函数定义的更多形式  
+
+##### 默认参数  
+
+函数定义最有用的形式是对一个或多个参数指定一个默认值。这样创建的函数，可以用比定义时更少的参数调用，比如：  
+
+```python
+def ask_ok(prompt, retries=4, reminder='Please try again!'):
+    while True:
+        ok = input(prompt)
+        if ok in ('y', 'ye', 'yes'):
+            return True
+        if ok in ('n', 'no', 'nop', 'nope'):
+            return False
+        retries = retries - 1
+        if retries < 0:
+            raise ValueError('invalid user response')
+        print(reminder)
+```  
+
+这个函数可以通过几种方式调用：  
+
+* 只给出必需的参数：`ask_ok('Do you really want to quit?')`
+* 给出一个可选的参数：`ask_ok('OK to overwrite the file?', 2)`
+* 或者给出所有的参数：`ask_ok('OK to overwrite the file?', 2, 'Come on, only yes or no!')`
+
+##### 关键字参数
+
+也可以使用类似`kwarg=value`的关键字参数来调用函数，例如下面的函数：  
+
+```python
+def parrot(voltage, state='a stiff', action='voom', type='Norwegian Blue'):
+    print("-- This parrot wouldn't", action, end=' ')
+    print("if you put", voltage, "volts through it.")
+    print("-- Lovely plumage, the", type)
+    print("-- It's", state, "!")
+```  
+
+函数需要一个必需的参数`voltage`和三个可选参数`state`、`action`和`type`。这个函数可以通过下面的任何一种方式调用：  
+
+```python
+parrot(1000)                                          # 1 positional argument
+parrot(voltage=1000)                                  # 1 keyword argument
+parrot(voltage=1000000, action='VOOOOOM')             # 2 keyword arguments
+parrot(action='VOOOOOM', voltage=1000000)             # 2 keyword arguments
+parrot('a million', 'bereft of life', 'jump')         # 3 positional arguments
+parrot('a thousand', state='pushing up the daisies')  # 1 positional, 1 keyword
+```  
+
+但下面的函数调用都是无效的：  
+
+```python
+parrot()                     # required argument missing
+parrot(voltage=5.0, 'dead')  # non-keyword argument after a keyword argument
+parrot(110, voltage=220)     # duplicate value for the same argument
+parrot(actor='John Cleese')  # unknown keyword argument
+```
+
+在函数调用中，关键字参数必须跟随在位置参数的后面。传递的所有关键字参数必须与函数接受的其中一个参数匹配（比如`actor`不是函数`parrot`的有效参数），它们的顺序并不重要。这也包括非可选参数，（比如`parrot(voltage=1000)`也是有效的）。不能对同一个参数多次赋值。  
+
+#### 参数传递  
+
+在python中，类型属于对象，变量是没有类型的。  
+
+在python中，字符串、元组和数字是不可更改的对象，列表和字典则是可以修改的对象。  
+
+* **不可变对象**：变量赋值`a=5`后再赋值`a=10`，这里实际是新生成一个int对象10，然后再让a指向它，之前的5会被丢弃。这相当于是新生成了个a，而不是改变了它的值。
+* **可变对象**：变量赋值`ls = [1,2,3,4,5]`，然后赋值`ls[2] = 9`；这只是修改了第三个元素的值，ls本身并没有改动。
+
+python函数的参数传递：  
+
+* **不可变类型**：对于不可变类型，传递参数时，实际是将参数的值传递到函数内部，并不是参数本身，相当于只是传了一个该参数的复本到函数中。
+* **可变类型**：对于可变类型，传递参数时，是将参数本身传递给了函数，在函数中的修改会影响到参数本身。
+
+#### return语句  
+
+**return [表达式]**语句用于退出函数，选择向调用者返回一个表达式。之前的例子都是没有返回值的，下面是有返回值的，同样是以Fibonacci为例：  
+
+```python
+>>> def fib2(n):  # return Fibonacci series up to n
+...     """Return a list containing the Fibonacci series up to n."""
+...     result = []
+...     a, b = 0, 1
+...     while a < n:
+...         result.append(a)    # see below
+...         a, b = b, a+b
+...     return result
+...
+>>> f100 = fib2(100)    # call it
+>>> f100                # write the result
+[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+```
+
+### 模块  
+
+之前的例子都是在Python解释器中执行的，如果你退出再进入，那么之前定义的所有内容都会消失。因此，如果你想要编写一个稍长些的程序，最好使用文本编辑器为编译器准备好输入并将该文件作为输入运行。这个过程通常被称为编写*脚本*。随着程序变得越来越长，你或许会想把它拆分成几个文件，以方便维护。亦或你想在不同的程序中使用一个便捷的函数，而不是把这个函数复制到每一个程序中去。  
+
+为支持这些，Python提供了一种方法：可以把定义放在一个文件里，并在脚本或解释器的交互式实例中使用它们。这样的文件被称作*模块*；模块中的定义可以*导入*到其它模块或者*主*模块（你在顶级和计算器模式下执行的脚本中可以访问的变量集合）。  
+
+模块是一个包含Python定义和语句的文件。文件名通常就是模块名后跟Python文件后缀`.py`。在模块内部，模块名可以通过全局变量`__name__`的值来获取。例如，你可以把之前的两个关于Fibonacci的例子放在一个名为`fibo.py`文件中，示例如下：  
+
+```python
+# Fibonacci numbers module
+
+def fib(n):    # write Fibonacci series up to n
+    a, b = 0, 1
+    while a < n:
+        print(a, end=' ')
+        a, b = b, a+b
+    print()
+
+def fib2(n):   # return Fibonacci series up to n
+    result = []
+    a, b = 0, 1
+    while a < n:
+        result.append(a)
+        a, b = b, a+b
+    return result
+```  
+
+现在打开Python解释器，输入以下命令导入该模块：  
+
+```python
+>>> import fibo
+```  
+
+之后你可以通过模块名`fibo`来调用其中的函数：  
+
+```python
+>>> fibo.fib(1000)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987
+>>> fibo.fib2(100)
+[0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89]
+>>> fibo.__name__
+'fibo'
+```  
+
+如果你要经常使用某个函数，你可以把它赋值给一个局部变量，以便之后使用：  
+
+```python
+>>> fib = fibo.fib
+>>> fib(500)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377
+```  
+
+#### import的变式  
+
+上面介绍的只是导入模块的一种方式，接下来介绍另一种导入模块的方式：`from ... import`。  
+
+在Python中，from语句允许你导入模块中的一部分到当前环境中，例如：  
+
+```python
+>>> from fibo import fib, fib2
+>>> fib(500)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377
+```  
+
+这种方式并不会把被调模块名引入到局部变量表中（因此在这个例子中，`fibo`是为定义的）。  
+
+`import`还有一个变式是导入模块中的所有定义：  
+
+```python
+>>> from fibo import *
+>>> fib(500)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377
+```  
+
+但通常都不会使用这种方式，因为这可能会覆盖一些你定义过的东西，而且这种方式也会降低代码的可读性。  
+
+#### 别名  
+
+那当导入的模块名称很长或者比较复杂的时候，有没有什么简单的方法来解决呢？答案当然是有的！  
+
+Python中的关键字`as`可以解决这一问题。在模块名之后使用`as`，那么`as`之后的名称可以当作导入模块的别名来绑定该模块中的所有定义：  
+
+```python
+>>> import fibo as fib
+>>> fib.fib(500)
+0 1 1 2 3 5 8 13 21 34 55 89 144 233 377
+```  
+
+这种方法也能用在`from`变式中。  
+
+#### 标准模块  
+
+Python附带了一个标准模块库，在单独的文档Python库参考中进行了描述。一些模块内置于解释器中；它们提供对不属于语言核心但仍然内置的操作的访问，以提高效率或提供对系统调用等操作系统原语的访问。这些模块的集合是一个配置选项，它也取决于底层平台。例如`winreg`模块只在Windows操作系统上提供。一个特别值得注意的模块`sys`，它被内嵌到每一个Python解释器中。变量`sys.ps1`和`sys.ps2`定义用作主要和辅助提示的字符串:  
+
+```python
+>>> import sys
+>>> sys.ps1
+'>>> '
+>>> sys.ps2
+'... '
+>>> sys.ps1 = 'C> '
+C> print('Yuck!')
+Yuck!
+C>
+```  
+
+这两个变量只有在编译器是交互模式下才被定义。  
+
+### 输入输出  
+
+好的输入输出格式，可以方便阅读。  
+
+#### 格式化
+
+##### 格式化字符串文字  
+
+[格式化字符串字面值](https://docs.python.org/zh-cn/3.7/reference/lexical_analysis.html#f-strings)能让你在字符串前加上`f`和`F`并将表达式写出`{expression}`来在字符串中包含Python表达式的值。  
+
+可选的格式说明符可以跟在表达式后面。这样可以更好地控制值的格式化方式。下面是将$\pi$舍入到小数点后三位的例子：  
+
+```python
+>>> import math
+>>> print(f'The value of pi is approximately {math.pi:.3f}.')
+The value of pi is approximately 3.142.
+```  
+
+在`:`后传递一个整数可以让该字段成为最小字符宽度。这在使列对齐时很有用。  
+
+```python
+>>> table = {'Sjoerd': 4127, 'Jack': 4098, 'Dcab': 7678}
+>>> for name, phone in table.items():
+...     print(f'{name:10} ==> {phone:10d}')
+...
+Sjoerd     ==>       4127
+Jack       ==>       4098
+Dcab       ==>       7678
+```  
+
+其它的修饰符可用于在格式化之前转化值。`!a`应用[ascii()](https://docs.python.org/zh-cn/3.7/library/functions.html#ascii),`!s`应用[str()](https://docs.python.org/zh-cn/3.7/library/stdtypes.html#str)，`!r`应用[repr()](https://docs.python.org/zh-cn/3.7/library/functions.html#repr)：  
+
+```python
+>>> animals = 'eels'
+>>> print(f'My hovercraft is full of {animals}.')
+My hovercraft is full of eels.
+>>> print(f'My hovercraft is full of {animals!r}.')
+My hovercraft is full of 'eels'.
+```  
+
+##### 字符串的format()方法  
+
+[str.format()](https://docs.python.org/zh-cn/3.7/library/stdtypes.html#str.format)方法的基本用法如下所示：  
+
+```python
+>>> print('We are the {} who say "{}!"'.format('knights', 'Ni'))
+We are the knights who say "Ni!"
+```  
+
+大括号和其中的字符将替换为传递给[str.format()](https://docs.python.org/zh-cn/3.7/library/stdtypes.html#str.format)方法的对象。大括号中的数字可用来表示传递给[str.format()](https://docs.python.org/zh-cn/3.7/library/stdtypes.html#str.format)方法的对象的位置。  
+
+```python
+>>> print('{0} and {1}'.format('spam', 'eggs'))
+spam and eggs
+>>> print('{1} and {0}'.format('spam', 'eggs'))
+eggs and spam
+```  
+
+如果在[str.format()](https://docs.python.org/zh-cn/3.7/library/stdtypes.html#str.format)方法中使用关键字参数，则使用参数的名称引用它们的值。  
+
+```python
+>>> print('This {food} is {adjective}.'.format(
+...       food='spam', adjective='absolutely horrible'))
+This spam is absolutely horrible.
+```  
+
+位置和关键字参数可以任意组合：  
+
+```python
+>>> print('The story of {0}, {1}, and {other}.'.format('Bill', 'Manfred',
+                                                       other='Georg'))
+The story of Bill, Manfred, and Georg.
+```  
+
+如果你有一个非常长的格式字符串，你不想把它拆开，那么你最好按名称而不是位置引用变量来进行格式化。这可以通过简单地传递字典和使用方括号`[]`访问键来完成：  
+
+```python
+>>> table = {'Sjoerd': 4127, 'Jack': 4098, 'Dcab': 8637678}
+>>> print('Jack: {0[Jack]:d}; Sjoerd: {0[Sjoerd]:d}; '
+...       'Dcab: {0[Dcab]:d}'.format(table))
+Jack: 4098; Sjoerd: 4127; Dcab: 8637678
+```  
+
+这也可以通过使用`**`符号将table作为关键字参数传递。  
+
+```python
+>>> table = {'Sjoerd': 4127, 'Jack': 4098, 'Dcab': 8637678}
+>>> print('Jack: {Jack:d}; Sjoerd: {Sjoerd:d}; Dcab: {Dcab:d}'.format(**table))
+Jack: 4098; Sjoerd: 4127; Dcab: 8637678
+```  
+
+这在与内置函数`vars()`结合使用时非常有用，它将返回包含所有局部变量的字典。  
+
+例如，下面几行代码生成一组整齐的列，其中包含给定的整数和它的平方以及立方：  
+
+```python
+>>> for x in range(1, 11):
+...     print('{0:2d} {1:3d} {2:4d}'.format(x, x*x, x*x*x))
+...
+ 1   1    1
+ 2   4    8
+ 3   9   27
+ 4  16   64
+ 5  25  125
+ 6  36  216
+ 7  49  343
+ 8  64  512
+ 9  81  729
+10 100 1000
+```  
+
+#### 读写文件  
+
+[open()](https://docs.python.org/zh-cn/3.7/library/functions.html#open)返回一个[file object](https://docs.python.org/zh-cn/3.7/glossary.html#term-file-object)，最常用的有两个参数：`open(filename, mode)`。  
+
+```python
+>>> f = open('workfile', 'w')
+```  
+
+第一个参数是包含文件名的字符串。第二个参数是另一个字符串，其中包含一些描述文件使用方式的字符。`mode`可以是`r`，表示文件只能读取，`w` 表示只能写入（已存在的同名文件会被删除），还有`a`表示打开文件以追加内容；任何写入的数据会自动添加到文件的末尾。`r+'`表示打开文件进行读写。`mode`参数是可选的；省略时默认为`r`。  
+
+通常文件是以*text mode*打开的，这意味着从文件中读取或写入字符串时，都会以指定的编码方式进行编码。如果未指定编码格式，默认值与平台相关 (参见[open()](https://docs.python.org/zh-cn/3.7/library/functions.html#open))。在mode中追加的`b`则以*binary mode*打开文件：现在数据是以字节对象的形式进行读写的。这个模式应该用于所有不包含文本的文件。
+
+在文本模式下读取时，默认会把平台特定的行结束符 (Unix 上的`\n`, Windows 上的`\r\n`) 转换为`\n`。在文本模式下写入时，默认会把出现的`\n`转换回平台特定的结束符。这样在幕后修改文件数据对文本文件来说没有问题，但是会破坏二进制数据例如`JPEG`或`EXE`文件中的数据。请一定要注意在读写此类文件时应使用二进制模式。
+
+在处理文件对象时，最好使用`with`关键字。优点是当子句体结束后文件会正确关闭，即使在某个时刻引发了异常。而且使用`with`相比等效的`try-finally`代码块要简短得多：  
+
+```python
+>>> with open('workfile') as f:
+...     read_data = f.read()
+>>> f.closed
+True
+```  
+
+如果你没有使用`with`关键字，那么你应该调用`f.close()`来关闭文件并立即释放它使用的所有系统资源。如果你没有显式地关闭文件，Python的垃圾回收器最终将销毁该对象并为你关闭打开的文件，但这个文件可能会保持打开状态一段时间。另外一个风险是不同的Python实现会在不同的时间进行清理。
+
+通过`with`语句或者调用`f.close()`关闭文件对象后，尝试使用该文件对象将自动失败：  
+
+```python
+>>> f.close()
+>>> f.read()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: I/O operation on closed file.
+```  
+
+##### 文件对象的方法  
+
+假设你已经创建名为`f`的文件对象。  
+
+要读取文件的内容，可以使用`f.read(size)`，它会读取一些数据并将其作为字符串（在文本模式下）或字节串对象（二进制模式下）返回。*size*是一个可选的数值参数。当*size*被省略或为负数时，将读取并返回整个文件的内容；如果文件的大小是你的机器内存的两倍就会出现问题。当取其他值时，将读取并返回至多*size*个字符（在文本模式下）或*size*个字节（在二进制模式下）。如果已到达文件末尾，`f.read()`将返回一个空字符串 (`''`)。  
+
+```python
+>>> f.read()
+'This is the entire file.\n'
+>>> f.read()
+''
+```  
+
+`f.readline()`从文中读取一行；换行符（`\n`）留在字符串的末尾。如果文件不以换行符结尾，则在文件的最后一行省略，这使得返回值明确无误。如果`f.readline()`返回一个空的字符串，则表示已经到达了文件末尾，而空行使用`\n`表示，表示只包含一个换行符：  
+
+```python
+>>> f.readline()
+'This is the first line of the file.\n'
+>>> f.readline()
+'Second line of the file\n'
+>>> f.readline()
+''
+```  
+
+要从文件中读取行，你可以循环遍历文件对象。这是内存高效，快速的，并简化代码：  
+
+```python
+>>> for line in f:
+...     print(line, end='')
+...
+This is the first line of the file.
+Second line of the file
+```  
+
+如果你想以列表的形式读取文件中的所有行，你也可以使用`list(f)`或`f.readlines()`。  
+
+`f.write(string)`会把*string*的内容写入到文件中，并返回写入的字符数：  
+
+```python
+>>> f.write('This is a test\n')
+15
+```  
+
+在写入其它类型的对象之前，需要先把它们转化为字符串（文本模式下）或者字节对象（二进制模式下）：  
+
+```python
+>>> value = ('the answer', 42)
+>>> s = str(value)  # convert the tuple to string
+>>> f.write(s)
+18
+```  
+
+`f.tell()`返回一个整数，给出文件对象在文件中的当前位置，表示为二进制模式下时从文件开始的字节数，以及文本模式下的意义不明的数字。  
+
+要改变文件对象的位置，可以使用`f.seek(offset,whence)`。通过向一个参考点添加*offset*来计算位置；参考点由*whence*参数指定。 whence的`0`值表示从文件开头起算，`1`表示使用当前文件位置，`2`表示使用文件末尾作为参考点。 *whence*如果省略则默认值为0，即使用文件开头作为参考点。  
+
+```python
+>>> f = open('workfile', 'rb+')
+>>> f.write(b'0123456789abcdef')
+16
+>>> f.seek(5)      # Go to the 6th byte in the file
+5
+>>> f.read(1)
+b'5'
+>>> f.seek(-3, 2)  # Go to the 3rd byte before the end
+13
+>>> f.read(1)
+b'd'
+```  
+
+## Python进阶  
+
+### pip包  
+
+除了Python提供的标准库之外，还有很多第三方开发者提供的包。你可以使用**pip**来安装、升级和移除软件包。默认情况下`pip`会从[Python Package Index](https://pypi.org)来安装软件包。  
+
+#### 安装包  
+
+可以使用`pip install packagename`来安装最新版本的包，例如：  
+
+```bash
+$ pip install novas
+```  
+
+也可以在包名后跟`==`和版本号来安装特定版本的包：  
+
+```bash
+$ pip install requests==2.6.0
+```  
+
+#### 更新包  
+
+你可以使用如下命令来更新软件包：  
+
+```bash
+$ pip install --upgrade requests
+```  
+
+#### 卸载包  
+
+你可以使用如下命令来卸载指定的软件包：  
+
+```bash
+$ pip uninstall requests
+```  
+
 
 
 本作品采用[知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议](https://creativecommons.org/licenses/by-nc-nd/4.0/)进行许可。
