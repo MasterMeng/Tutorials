@@ -1118,7 +1118,7 @@ b'd'
 
 ## Python进阶  
 
-### pip包  
+### pip包管理  
 
 除了Python提供的标准库之外，还有很多第三方开发者提供的包。你可以使用**pip**来安装、升级和移除软件包。默认情况下`pip`会从[Python Package Index](https://pypi.org)来安装软件包。  
 
@@ -1151,6 +1151,16 @@ $ pip install --upgrade requests
 ```bash
 $ pip uninstall requests
 ```  
+
+### 类  
+
+类提供了一种组合数据和功能的方法。创建一个新类意味着创建了一个新的对象*类型*，之后可以创建一个该类型的实例。每个类的实例可以拥有保存自己状态的属性，当然也可以通过在类中定义的方法来改变自己的属性。  
+
+#### 作用域和命名空间  
+
+在介绍类之前，你需要先了解一些Python的作用域规则。
+
+
 
 ## 示例  
 
@@ -1273,5 +1283,8 @@ if __name__ == "__main__":
     #     os.remove(excel)
 ``` 
 
+## 参考  
+
+本文是参照[Python 3.7教程文档](https://docs.python.org/zh-cn/3.7/tutorial/index.html)，结合我自己的使用过程编写的。
 
 本作品采用[知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议](https://creativecommons.org/licenses/by-nc-nd/4.0/)进行许可。
