@@ -11,6 +11,8 @@ ways = {0: '自驾', 1: '高铁', 2: '飞机'}
 '''
 @param filename:生成的excel文件名
 '''
+
+
 def CreateExcel(filename):
     # 创建文件对象
     wb = Workbook()
@@ -50,6 +52,8 @@ def CreateExcel(filename):
 @param files: 要汇总的excel文件列表
 @param filename: 汇总后的excel文件名
 '''
+
+
 def CountExcel(files, filename):
     # 打开文件对象
     wb = Workbook()
@@ -103,3 +107,6 @@ if __name__ == "__main__":
 
     # for excel in excels:
     #     os.remove(excel)
+
+
+

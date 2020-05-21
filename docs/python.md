@@ -1118,6 +1118,59 @@ b'd'
 
 ## Python进阶  
 
+### 类  
+
+在介绍类之前，需要先介绍下面向对象编程 --- Object Oriented Programming，简称OOP，这是一中程序设计思想。在OOP中，把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数。  
+
+面向对象的程序设计把程序看作是一组对象的集合，每个对象都可以接受其它对象发过来的消息并进行处理。程序的执行实质是一系列消息在不同对象之间的传递处理。  
+
+这里有必要提一下面向过程编程 --- Procedure Oriented Programming，检查POP。面向过程的程序设计是把程序看作一系列命令的集合，即一组函数的顺序执行。
+
+Python从设计之初就是一门面向对象编程的语言，所以它同样具有面向对象编程的所有标准特性：类继承机制允许多个基类，派生类可以重写它基类的任何方法，一个方法可以调用基类中的同名方法。
+
+接下来我们通过一个简单的例子来介绍面向对象编程和面向函数编程的不同。  
+
+假设我们要用程序来展示个人信息，包括姓名、年龄，在面向过程的程序中可能要用一个字典来表示：  
+
+```python
+person0 = {'name': 'xiaohong', 'age': '18'}
+person1 = {'name': 'xiaoming', 'age': '20'}
+```  
+
+而要展示个人信息，我们需要定义一个函数：  
+
+```python
+def print_person(person):
+    print('name: %s ,age: %d' % (persion['name'], person['age']))
+```  
+
+在面向对象编程中，我们首先考虑的不是程序的执行过程，而是将`person`作为一个对象，这个对象有两个属性`name`和`age`，要展示这两个属性，需要一个`print_person`的方法来将这两个输出输出：  
+
+```python
+class Person(object):
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    def print_person(self):
+        print('name: %s ,age: %d' % (persion['name'], person['age']))
+```  
+
+面向对象编程的程序类似下面的：  
+
+```python
+person0 = Person('xiaohong', 18)
+person1 = Person('xiaoming', 20)
+
+person0.print_person()
+person1.print_person()
+```  
+
+从上面的例子中，可以看出`类`提供了一种组合数据和功能的方法。创建一个新类意味着创建一个新的对象的类型，从而允许创建一个该对象的新实例。每个类的实例可以拥有保存自己状态的属性。一个类的实例也可以通过类中定义的方法来修改自己的状态。  
+
+
+
+
 ### pip包  
 
 除了Python提供的标准库之外，还有很多第三方开发者提供的包。你可以使用**pip**来安装、升级和移除软件包。默认情况下`pip`会从[Python Package Index](https://pypi.org)来安装软件包。  
