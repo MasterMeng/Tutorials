@@ -1118,7 +1118,6 @@ b'd'
 
 ## Python进阶  
 
-<<<<<<< HEAD
 ### 类  
 
 在介绍类之前，需要先介绍下面向对象编程 --- Object Oriented Programming，简称OOP，这是一中程序设计思想。在OOP中，把对象作为程序的基本单元，一个对象包含了数据和操作数据的函数。  
@@ -1173,9 +1172,6 @@ person1.print_person()
 
 
 ### pip包  
-=======
-### pip包管理  
->>>>>>> 6f97687514fa0925bdb53d3f175cf0c21f5df6e6
 
 除了Python提供的标准库之外，还有很多第三方开发者提供的包。你可以使用**pip**来安装、升级和移除软件包。默认情况下`pip`会从[Python Package Index](https://pypi.org)来安装软件包。  
 
